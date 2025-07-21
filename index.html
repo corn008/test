@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>題庫測驗系統</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>題庫測驗系統</h1>
+        <div id="timer-display" class="timer-display hidden"></div>
+    </header>
+    
+    <div class="container">
+        <div class="upload-section">
+            <h2>準備測驗</h2>
+            
+            <details>
+                <summary>查看題庫格式說明</summary>
+                <div class="instructions">
+                    <p>系統會自動偵測您的題庫類型。</p>
+                    <p><b>選擇題格式 1 (推薦):</b></p>
+                    <p>- A欄: 問題, B欄: 選項A, C欄: 選項B ...</p>
+                    <p><b>選擇題格式 2 (選項在題目內):</b></p>
+                    <p>- A欄: 試題 (內容範例: `題目... (A)選項一 (B)選項二`)</p>
+                    <p>- B欄: 答案 (A, B, C...)</p>
+                    <p><b>是非題格式：</b></p>
+                    <p>- A欄: 試題, B欄: 答案 (O 或 X)</p>
+                </div>
+            </details>
+            
+            <div class="file-input">
+                <label for="quiz-file" class="custom-file-upload">選擇Excel題庫檔案</label>
+                <input type="file" id="quiz-file" accept=".xlsx, .xls">
+                <div id="file-name">尚未選擇檔案</div>
+                <p class="error-message" id="file-error"></p>
+                <p class="success-message" id="file-success"></p>
+            </div>
+
+            <div class="file-input">
+                <label for="random-count">隨機抽題數量 (留空則測驗全部):</label>
+                <input type="number" id="random-count" min="1" placeholder="例如: 50" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+            </div>
+
+            <div class="file-input">
+                <label for="time-limit">測驗時間 (分鐘，0或留空則不計時):</label>
+                <input type="number" id="time-limit" min="0" placeholder="例如: 30" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            
+            <div class="button-group">
+                <button class="button" id="start-quiz" disabled>開始新測驗</button>
+                <button class="button secondary hidden" id="continue-quiz">繼續上次測驗</button>
+                <button class="button secondary hidden" id="restart-quiz">放棄並重新開始</button>
+            </div>
+            
+            <div id="quiz-info" class="hidden" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                <h3>測驗資訊</h3>
+                <p><strong>題數：</strong> <span id="total-questions">0</span></p>
+                <p><strong>已答：</strong> <span id="answered">0</span></p>
+            </div>
+        </div>
+        
+        <div class="quiz-section">
+            <div id="quiz-start">
+                <h2>歡迎使用題庫測驗系統</h2>
+                <p>請在左側設定並上傳Excel題庫檔案以開始測驗。</p>
+                <img src="https://placehold.co/600x400/eef2f7/7d93b0?text=Quiz+Time!" alt="知識測驗插圖 - 書本、鉛筆和燈泡符號，象徵學習與測驗" style="max-width: 100%; border-radius: 8px;" />
+            </div>
+            
+            <div id="quiz-container" class="hidden">
+                <div class="progress-container">
+                    <div class="question-count">
+                        <span id="current-question-number">1</span> / <span id="total-questions-display">0</span>
+                    </div>
+                    <button class="button secondary" id="early-submit-quiz" style="display: none; background-color: #e67e22;">提前交卷</button>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div id="question-palette" class="question-palette">
+                    <!-- 題目導覽面板將在這裡插入 -->
+                </div>
+
+                <div id="question-display">
+                    <!-- 問題將在這裡插入 -->
+                </div>
+                
+                <div class="navigation">
+                    <button class="button secondary" id="prev-question" disabled>上一題</button>
+                    <button class="button" id="next-question">下一題</button>
+                    <button class="button" id="submit-quiz" style="display: none;">提交測驗</button>
+                </div>
+            </div>
+            
+            <div id="quiz-result" class="hidden">
+                <div class="result-container">
+                    <h2>測驗結果</h2>
+                    <div class="result-score" id="score-display">85%</div>
+                    <div class="result-message" id="result-message"></div>
+                    <button class="button" id="review-quiz">查看詳細結果</button>
+                    <button class="button secondary" id="export-results">列印/儲存報告</button>
+                </div>
+                
+                <div id="quiz-summary" class="summary hidden">
+                    <h3>詳細報告</h3>
+                    <!-- 測驗摘要將在這裡插入 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
